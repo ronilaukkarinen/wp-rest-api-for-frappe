@@ -60,35 +60,5 @@ function get_posts_and_words( $request ) {
     set_transient( 'heatmap_query', $heatmap_query, 24 * 60 * 60 );
   }
 
-  foreach ( $heatmap_query as $key => $heatmap_post ) {
-    setup_postdata( $heatmap_post );
-
-    // Word count
-    $post_id = $heatmap_post->ID;
-    $post_object = get_post( $post_id );
-    $content = $post_object->post_content;
-    $word_count = post_word_count( $content );
-
-    // Unix timestamp
-    $timestamp = get_the_time( 'Y-m-d', $post_id );
-    $day = get_the_time( 'd', $post_id );
-    $unix_timestamp = get_post_timestamp( $heatmap_post );
-
-    // Form an array
-    $heatmap_post_array[ $unix_timestamp ] = $word_count;
-
-    // If same day has multiple posts, combine word counts and show total count for one day
-    $post_date = strtotime( get_the_time( 'Y-m-d 00:00:00', $post_id ) );
-    if ( array_key_exists( $post_date, $heatmap_post_array ) ) {
-      $heatmap_post_array[ $post_date ] = $heatmap_post_array[ $post_date ] + $word_count;
-    } else {
-      $heatmap_post_array[ $post_date ] = $word_count;
-    }
-  }
-
-  // echo '<pre>';
-  // var_dump( $heatmap_post_array );
-  // echo '<pre>';
-
-  return $heatmap_post_array;
+  return $heatmap_query;
 }
