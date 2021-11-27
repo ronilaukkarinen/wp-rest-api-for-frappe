@@ -56,8 +56,9 @@ function get_posts_and_words( $request ) {
   if ( false === $heatmap_query ) {
     $heatmap_query = get_posts( $heatmap_args );
 
-    // Put the results in a transient. Expire after 24 hours.
-    set_transient( 'heatmap_query', $heatmap_query, 24 * 60 * 60 );
+    // Put the results in a transient.
+    $hours = 1;
+    set_transient( 'heatmap_query', $heatmap_query, 3600 );
   }
 
   return $heatmap_query;
