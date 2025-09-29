@@ -35,7 +35,7 @@ function init_wordcount_endpoint() {
   register_rest_route( 'words/v1',
       'getposts', array(
       'methods'   => 'GET',
-      'callback'  => __NAMESPACE__ . '\get_posts_and_words',
+      'callback'  => 'get_posts_and_words',
     )
   );
 }
@@ -59,6 +59,11 @@ function get_posts_and_words( $request ) {
     // Put the results in a transient.
     $hours = 1;
     set_transient( 'heatmap_query', $heatmap_query, 3600 );
+  }
+
+  // Ensure we always return an array
+  if ( ! is_array( $heatmap_query ) ) {
+    $heatmap_query = array();
   }
 
   return $heatmap_query;
